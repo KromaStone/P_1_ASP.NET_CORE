@@ -1,6 +1,12 @@
+using Employee_With_JWT;
 using Employee_With_JWT.Identity;
+using Employee_With_JWT.Service;
+using Employee_With_JWT.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +28,7 @@ builder.Services.AddTransient<UserManager<ApplicationUser>, ApplicationUserManag
 builder.Services.AddTransient<SignInManager<ApplicationUser>, ApplicationSignInManager>();
 builder.Services.AddTransient<RoleManager<ApplicationRole>, ApplicationRoleManager>();
 builder.Services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
-//builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddUserStore<ApplicationUserStore>()
@@ -35,6 +41,35 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 builder.Services.AddScoped<ApplicationRoleStore>();
 builder.Services.AddScoped<ApplicationUserStore>();
 //****
+
+//JWT----------------
+var appsettingSection = builder.Configuration.GetSection("AppSettings");
+builder.Services.Configure<AppSettings>(appsettingSection);
+var appsetting = appsettingSection.Get<AppSettings>();
+var key = Encoding.ASCII.GetBytes(appsetting.Secret);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+}).AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+//---------------------
+
+
+
+
 
 
 var app = builder.Build();
