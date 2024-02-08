@@ -96,11 +96,9 @@ namespace Employee_With_JWT.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Salary")
@@ -108,7 +106,7 @@ namespace Employee_With_JWT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("employeeRoles");
+                    b.ToTable("employees");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

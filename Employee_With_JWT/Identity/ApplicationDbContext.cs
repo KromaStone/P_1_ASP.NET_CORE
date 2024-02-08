@@ -11,6 +11,6 @@ namespace Employee_With_JWT.Identity
             
         }
         public DbSet<ApplicationRole>applicationRoles { get; set; }
-        public DbSet<Employee> employeeRoles { get; set; }
+        public DbSet<Employee>employees{ get; set; }
     } 
 }

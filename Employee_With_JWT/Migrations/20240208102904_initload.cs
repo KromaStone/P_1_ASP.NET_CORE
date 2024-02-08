@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Employee_With_JWT.Migrations
 {
     /// <inheritdoc />
-    public partial class initLoad : Migration
+    public partial class initload : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,18 +52,18 @@ namespace Employee_With_JWT.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "employeeRoles",
+                name: "employees",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Salary = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_employeeRoles", x => x.Id);
+                    table.PrimaryKey("PK_employees", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,7 +231,7 @@ namespace Employee_With_JWT.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "employeeRoles");
+                name: "employees");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

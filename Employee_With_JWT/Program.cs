@@ -5,7 +5,9 @@ using Employee_With_JWT.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,14 +65,21 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = false,
         ValidateAudience = false
     };
+});//---------------------
+
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "MyPolicy", builder =>
+    {
+        builder.WithOrigins("http://localhost:4200").AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
 });
 
-//---------------------
 
-
-
-
-
+//swagger options 
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>,ConfigureSwaggerOption>();
 
 var app = builder.Build();
 
@@ -81,10 +90,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("MyPolicy");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+///-------------------------
 /*IServiceScopeFactory serviceScopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
 using (IServiceScope scope=serviceScopeFactory.CreateScope())
 {
@@ -131,8 +142,8 @@ using (IServiceScope scope=serviceScopeFactory.CreateScope())
 
 
 }*/
+//-------------------------
 
-
-    app.MapControllers();
+app.MapControllers();
 
 app.Run();

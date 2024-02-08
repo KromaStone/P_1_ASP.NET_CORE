@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Employee_With_JWT.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240207020909_initLoad")]
-    partial class initLoad
+    [Migration("20240208102904_initload")]
+    partial class initload
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,11 +99,9 @@ namespace Employee_With_JWT.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Salary")
@@ -111,7 +109,7 @@ namespace Employee_With_JWT.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("employeeRoles");
+                    b.ToTable("employees");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
